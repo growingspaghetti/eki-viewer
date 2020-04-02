@@ -1,0 +1,1 @@
+This directory contains scripts used to compile the dictionary data from http://www.eki.ee/dict/psv/index.cgi.
