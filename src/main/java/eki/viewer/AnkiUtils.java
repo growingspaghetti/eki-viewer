@@ -58,7 +58,16 @@ public class AnkiUtils {
         .replace("`", "");
   }
 
-  public static final String buildHtmlView(EkiRecord ekiRecord) {
+  public static String buildAnkiLine(EkiRecord ekiRecord) {
+    return String.format(
+        "%s\t%s\t%s\t%s",
+        ekiRecord.getEtTitleRaw(),
+        ekiRecord.getMp3FileName(),
+        ekiRecord.getEtBodyRaw(),
+        ekiRecord.getEnEtBodyRaw());
+  }
+
+  public static String buildHtmlView(EkiRecord ekiRecord) {
     return "<html><div style=\"padding:4px\">"
         + "<h1>"
         + ekiRecord.getEtTitleRaw()

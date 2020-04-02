@@ -29,17 +29,17 @@ public class AnkiSubsetUtils {
     CompletableFuture.runAsync(() -> new Mp3Player().testPlay(mp3File));
   }
 
+  public static void remove(EkiRecord ekiRecord, File ankiFile) throws IOException {
+    List<String> lines = FileUtils.readLines(ankiFile, StandardCharsets.UTF_8);
+    lines.remove(AnkiUtils.buildAnkiLine(ekiRecord));
+    FileUtils.writeLines(ankiFile, StandardCharsets.UTF_8.toString(), lines, "\n", false);
+  }
+
   public static void appendToAnkiSubset(EkiRecord ekiRecord) throws IOException {
     String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
     new File(ANKI_SUBSET_DIR).mkdir();
     new File(ANKI_SUBSET_DIR + COLLECTION_MEDIA_DIR).mkdir();
-    String ankiLine =
-        String.format(
-            "%s\t%s\t%s\t%s",
-            ekiRecord.getEtTitleRaw(),
-            ekiRecord.getMp3FileName(),
-            ekiRecord.getEtBodyRaw(),
-            ekiRecord.getEnEtBodyRaw());
+    String ankiLine = AnkiUtils.buildAnkiLine(ekiRecord);
 
     File ankiSubset = new File(ANKI_SUBSET_DIR + today + "-anki-tab.txt");
     if (!ankiSubset.exists()) {

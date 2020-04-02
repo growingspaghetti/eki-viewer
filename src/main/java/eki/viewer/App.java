@@ -42,8 +42,6 @@ import javax.swing.text.DefaultEditorKit;
 import org.apache.commons.io.FileUtils;
 
 public class App extends JFrame {
-  private static final long serialVersionUID = 1L;
-
   private Optional<EkiRecord> currentEkiRecord = Optional.empty();
 
   private DefaultListModel<EkiRecord> model = new DefaultListModel<>();
@@ -77,7 +75,7 @@ public class App extends JFrame {
     new RepeatingReleasedEventsFixer().install();
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setCellRenderer(new ListCellRenderableLabel());
-    Arrays.asList(list.getKeyListeners()).forEach(l -> list.removeKeyListener(l));
+    Arrays.asList(list.getKeyListeners()).forEach(list::removeKeyListener);
 
     JPopupMenu menu = new JPopupMenu();
     Action copy = new DefaultEditorKit.CopyAction();
