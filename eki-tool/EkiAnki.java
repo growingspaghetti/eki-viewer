@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,24 +76,23 @@ public class EkiAnki {
 
   private static void ffmpeg(String t, List<File> fs) {
     try {
+      FileUtils.writeLines(
+          new File("tempwavs.txt"),
+          fs.stream().map(f -> "file '" + f.getAbsolutePath() + "'").collect(Collectors.toList()));
+
       List<String> command = new ArrayList<>();
-
-      // ffmpeg -i "concat:file1.mp3|file2.mp3" -acodec copy output.mp3
-      StringBuilder sb = new StringBuilder();
-      for (File f : fs) {
-        sb.append("|" + f.getAbsolutePath());
-      }
-
       command.add("ffmpeg");
+      command.add("-f");
+      command.add("concat");
+      command.add("-safe");
+      command.add("0");
       command.add("-i");
+      command.add("tempwavs.txt");
+
       if (fs.isEmpty()) {
         return;
       }
-      if (fs.size() == 1) {
-        command.add(sb.substring(1));
-      } else {
-        command.add("concat:" + sb.substring(1));
-      }
+
       command.add("-y");
       command.add("eki_media/" + t);
 
