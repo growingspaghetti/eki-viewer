@@ -54,6 +54,7 @@ public class App extends JFrame {
   JCheckBox playAudioCheck = new JCheckBox("Play audio");
   JCheckBox ankiCheck = new JCheckBox("Create Anki subset");
   JButton openEkiWebButton = new JButton("Open in web");
+  JButton openGlosbeWebButton = new JButton("Search in glosbe.com");
   JButton openAnkiSubsetButton = new JButton("Open Anki subset");
 
   private App(File ankiFile) throws Exception {
@@ -128,7 +129,8 @@ public class App extends JFrame {
     statusPanel.add(checkBoxPanel, BorderLayout.EAST);
     JPanel buttonPanel = new JPanel(new BorderLayout());
     buttonPanel.add(openEkiWebButton, BorderLayout.WEST);
-    buttonPanel.add(openAnkiSubsetButton, BorderLayout.CENTER);
+    buttonPanel.add(openGlosbeWebButton, BorderLayout.CENTER);
+    buttonPanel.add(openAnkiSubsetButton, BorderLayout.EAST);
     statusPanel.add(buttonPanel, BorderLayout.WEST);
     this.add(statusPanel, BorderLayout.SOUTH);
     this.setPreferredSize(new Dimension(1000, 800));
@@ -177,6 +179,18 @@ public class App extends JFrame {
             desktop.browse(
                 URI.create(
                     "http://www.eki.ee/dict/psv/index.cgi?F=M&Q=" + title.replace(" ", "%20")));
+          } catch (Exception ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, "", ex);
+          }
+        });
+    openGlosbeWebButton.addActionListener(
+        (ActionEvent e) -> {
+          String title = currentEkiRecord.map(EkiRecord::getEtTitleRaw).orElse("");
+          try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.browse(
+                URI.create(
+                    "https://glosbe.com/et/en/" + title.replace(" ", "%20")));
           } catch (Exception ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, "", ex);
           }
