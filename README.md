@@ -23,7 +23,7 @@ This application can work with a flashcard application named Anki, https://apps.
 
 ![](./doc-imgs/subset-anki.png)
 
-You can import these subsets instead of the [entire data of Basic Estonian Dictionary](https://ankiweb.net/shared/info/1538416888) to Anki.
+You can import these subsets instead of the [entire data of Basic Estonian Dictionary](https://ankiweb.net/shared/info/245992522) to Anki.
 
 
 # build from source (if you clone this repository)
