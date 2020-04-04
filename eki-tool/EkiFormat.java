@@ -92,7 +92,7 @@ public class EkiFormat {
             Element e = (Element) sources.item(j);
             String src = Optional.ofNullable(e.getAttribute("src")).orElse("");
             LOGGER.info(src);
-            if (src.startsWith("__synt/") && src.endsWith(".wav")) {
+            if ((src.startsWith("__synt/") || (src.startsWith("__heli/")) && src.endsWith(".wav")) {
               byte[] b = IOUtils.toByteArray(new URL("http://www.eki.ee/dict/psv/" + src));
               File mediaDir =
                   new File(DEST_DIR + f.getName().toLowerCase().replace(" ", "_") + ".media");

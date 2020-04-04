@@ -3,6 +3,7 @@ package eki.viewer;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -16,17 +17,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.swing.Action;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.text.DefaultEditorKit;
 
 import org.apache.commons.io.FileUtils;
 
@@ -91,9 +98,34 @@ public class SubsetTabbedPane extends JFrame {
                   .forEach(e -> SwingUtilities.invokeLater(() -> model.addElement(e))));
       JPanel jPanel = new JPanel(new BorderLayout());
       jPanel.add(new JScrollPane(list), BorderLayout.CENTER);
-      JButton jButton = new JButton("Open this subset");
-      jPanel.add(jButton, BorderLayout.NORTH);
-      jButton.addActionListener(
+      JPanel subsetButtonPanel = new JPanel(new GridLayout(1, 3, 5, 5));
+      JButton openSubsetButton = new JButton("Open this subset");
+      JButton exportButton = new JButton("Export titles");
+      exportButton.addActionListener(
+          (ActionEvent e) -> {
+            String titles =
+                Collections.list(model.elements())
+                    .stream()
+                    .map(EkiRecord::getEtTitleRaw)
+                    .collect(Collectors.joining("\n"));
+            JEditorPane ep = new JEditorPane();
+            ep.setText(titles);
+            JPopupMenu m = new JPopupMenu();
+            Action c = new DefaultEditorKit.CopyAction();
+            c.putValue(Action.NAME, "Copy");
+            c.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+            m.add(c);
+            ep.setComponentPopupMenu(m);
+            JScrollPane sp = new JScrollPane(ep);
+            sp.setPreferredSize(new Dimension(500, 500));
+            JOptionPane.showMessageDialog(this, sp, "", JOptionPane.NO_OPTION);
+          });
+
+      subsetButtonPanel.add(openSubsetButton);
+      subsetButtonPanel.add(new JLabel());
+      subsetButtonPanel.add(exportButton);
+      jPanel.add(subsetButtonPanel, BorderLayout.NORTH);
+      openSubsetButton.addActionListener(
           (ActionEvent e) ->
               CompletableFuture.runAsync(
                   () ->
